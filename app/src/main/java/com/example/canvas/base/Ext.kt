@@ -1,9 +1,6 @@
 package com.example.canvas.base
 
 import android.view.View
-import android.widget.TextView
-import androidx.annotation.StyleRes
-import androidx.core.widget.TextViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.hannesdorfmann.adapterdelegates4.AbsDelegationAdapter
 

@@ -8,9 +8,9 @@ sealed class ToolItem : Item {
     data class SizeModel(val size: Int) : ToolItem()
     data class ToolModel(
         val type: TOOLS,
-        val selectedTool: TOOLS = TOOLS.NORMAL,
+//        val selectedTool: TOOLS = TOOLS.NORMAL,
         val isSelected: Boolean = false,
-//        val selectedSize: SIZE = SIZE.SMALL,
+        val selectedSize: SIZE = SIZE.SMALL,
         val selectedColor: COLOR = COLOR.BLACK
     ) : ToolItem()
 }

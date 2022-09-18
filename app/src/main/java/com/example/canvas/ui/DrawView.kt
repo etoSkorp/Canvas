@@ -52,7 +52,7 @@ class DrawView @JvmOverloads constructor(
     }
 
     fun render(state: CanvasViewState) {
-        drawColor - ResourcesCompat.getColor(resources, state.color.value, null)
+        drawColor = ResourcesCompat.getColor(resources, state.color.value, null)
         paint.color = drawColor
         paint.strokeWidth = state.size.value.toFloat()
         if (state.tools == TOOLS.DASH) {

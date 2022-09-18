@@ -8,16 +8,15 @@ import com.example.canvas.data.ToolItem
 data class ViewState(
     val toolsList: List<ToolItem.ToolModel>,
     val colorList: List<ToolItem.ColorModel>,
-//    val sizeList: List<ToolItem.SizeModel>,
+    val sizeList: List<ToolItem.SizeModel>,
     val canvasViewState: CanvasViewState,
     val isPaletteVisible: Boolean,
-//    val isBrushSizeChangerVisible: Boolean,
+    val isBrushSizeChangerVisible: Boolean,
     val isToolsVisible: Boolean
 )
 
 sealed class UIEvent : Event {
     data class OnPaletteClicked(val index: Int) : UIEvent()
-    data class OnColorClicked(val index: Int) : UIEvent()
     data class OnSizeClicked(val index: Int) : UIEvent()
     data class OnToolsClicked(val index: Int) : UIEvent()
     object OnDrawViewClicked : UIEvent()
@@ -25,5 +24,5 @@ sealed class UIEvent : Event {
 }
 
 sealed class DataEvent : Event {
-    data class OnSetDefaultTools(val tool: TOOLS, val color: COLOR) : DataEvent()
+    data class OnSetDefaultTools(val tool: TOOLS) : DataEvent()
 }

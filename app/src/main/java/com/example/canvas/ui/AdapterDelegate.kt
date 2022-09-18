@@ -2,6 +2,7 @@ package com.example.canvas.ui
 
 import android.graphics.PorterDuff
 import android.widget.ImageView
+import android.widget.TextView
 import com.example.canvas.R
 import com.example.canvas.base.Item
 import com.example.canvas.data.TOOLS
@@ -25,18 +26,30 @@ fun colorAdapterDelegate(
         }
     }
 
-//fun sizeChangeAdapterDelegate(
-//    onSizeClick: (Int) -> Unit
-//): AdapterDelegate<List<Item>> =
-//    adapterDelegateLayoutContainer<ToolItem.SizeModel, Item>(
-//        R.layout.item_size
-//    ) {
-//        val tvToolsSize: TextView = findViewById(R.id.tvToolsSize)
-//        itemView.setOnClickListener { onSizeClick(adapterPosition) }
-//        bind { list ->
-//            tvToolsSize.text = item.size.toString()
-//        }
-//    }
+fun sizeChangeAdapterDelegate(
+    onSizeClick: (Int) -> Unit
+): AdapterDelegate<List<Item>> =
+    adapterDelegateLayoutContainer<ToolItem.SizeModel, Item>(
+        R.layout.item_size
+    ) {
+        val tvTextSize: TextView = findViewById(R.id.tvBrushSize)
+        itemView.setOnClickListener { onSizeClick(adapterPosition) }
+        bind { list ->
+            tvTextSize.text = item.size.toString()
+            itemView.setBackgroundResource(R.drawable.tool_size_item)
+            when (item.size) {
+                4 -> {
+                    tvTextSize.textSize = 12.toFloat()
+                }
+                16 -> {
+                    tvTextSize.textSize = 14.toFloat()
+                }
+                32 -> {
+                    tvTextSize.textSize = 17.toFloat()
+                }
+            }
+        }
+    }
 
 fun toolsAdapterDelegate(
     onToolsClick: (Int) -> Unit
@@ -48,10 +61,6 @@ fun toolsAdapterDelegate(
 //        val tvToolsText: TextView = findViewById(R.id.tvToolsText)
         bind { list ->
             ivTool.setImageResource(item.type.value)
-
-//            if (tvToolsText.isVisible) {
-//                tvToolsText.isVisible = false
-//            }
 
             when (item.type) {
                 TOOLS.PALETTE -> {
@@ -68,11 +77,6 @@ fun toolsAdapterDelegate(
                         ivTool.setBackgroundResource(R.color.transparent)
                     }
                 }
-
-//                TOOLS.SIZE -> {
-//                    tvToolsText.isVisible = true
-//                    tvToolsText.text = item.selectedSize.value.toString()
-//                }
             }
 
             itemView.setOnClickListener {
