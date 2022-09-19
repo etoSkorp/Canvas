@@ -2,25 +2,25 @@ package com.example.canvas.ui
 
 import com.example.canvas.base.BaseViewModel
 import com.example.canvas.base.Event
-import com.example.canvas.data.COLOR
-import com.example.canvas.data.SIZE
-import com.example.canvas.data.TOOLS
-import com.example.canvas.data.ToolItem
+import com.example.canvas.data.*
 
 class CanvasViewModel : BaseViewModel<ViewState>() {
     override fun initialViewState(): ViewState =
         ViewState(
-            colorList = enumValues<COLOR>().map { ToolItem.ColorModel(it.value) },
             toolsList = enumValues<TOOLS>().map { ToolItem.ToolModel(it) },
+            colorList = enumValues<COLOR>().map { ToolItem.ColorModel(it.value) },
             sizeList = enumValues<SIZE>().map { ToolItem.SizeModel(it.value) },
+            shapeList = enumValues<SHAPE>().map { ToolItem.ShapeModel(it.value) },
             canvasViewState = CanvasViewState(
                 color = COLOR.BLACK,
                 size = SIZE.MEDIUM,
-                tools = TOOLS.NORMAL
+                tools = TOOLS.NORMAL,
+                shape = SHAPE.TRIANGLE
             ),
-            isPaletteVisible = false,
             isToolsVisible = false,
-            isBrushSizeChangerVisible = false
+            isPaletteVisible = false,
+            isBrushSizeChangerVisible = false,
+            isShapeVisible = false
         )
 
     init {
@@ -33,7 +33,8 @@ class CanvasViewModel : BaseViewModel<ViewState>() {
                 return previousState.copy(
                     isToolsVisible = !previousState.isToolsVisible,
                     isPaletteVisible = false,
-                    isBrushSizeChangerVisible = false
+                    isBrushSizeChangerVisible = false,
+                    isShapeVisible = false
                 )
             }
 
@@ -42,6 +43,15 @@ class CanvasViewModel : BaseViewModel<ViewState>() {
                     TOOLS.PALETTE.ordinal -> {
                         return previousState.copy(
                             isPaletteVisible = !previousState.isPaletteVisible,
+                            isBrushSizeChangerVisible = false,
+                            isShapeVisible = false
+                        )
+                    }
+
+                    TOOLS.SHAPE.ordinal -> {
+                        return previousState.copy(
+                            isShapeVisible = !previousState.isShapeVisible,
+                            isPaletteVisible = false,
                             isBrushSizeChangerVisible = false
                         )
                     }
@@ -49,7 +59,8 @@ class CanvasViewModel : BaseViewModel<ViewState>() {
                     TOOLS.SIZE.ordinal -> {
                         return previousState.copy(
                             isBrushSizeChangerVisible = !previousState.isBrushSizeChangerVisible,
-                            isPaletteVisible = false
+                            isPaletteVisible = false,
+                            isShapeVisible = false
                         )
                     }
 
@@ -65,6 +76,7 @@ class CanvasViewModel : BaseViewModel<ViewState>() {
                             toolsList = toolsList,
                             isPaletteVisible = false,
                             isBrushSizeChangerVisible = false,
+                            isShapeVisible = false,
                             canvasViewState = previousState.canvasViewState.copy(tools = TOOLS.values()[event.index])
                         )
                     }
@@ -84,6 +96,22 @@ class CanvasViewModel : BaseViewModel<ViewState>() {
                     toolsList = toolsList,
                     isPaletteVisible = !previousState.isPaletteVisible,
                     canvasViewState = previousState.canvasViewState.copy(color = selectedColor)
+                )
+            }
+
+            is UIEvent.OnShapeClicked -> {
+                val selectedShape = SHAPE.values()[event.index]
+                val toolsList = previousState.toolsList.map {
+                    if (it.type == TOOLS.SHAPE) {
+                        it.copy(selectedShape = selectedShape)
+                    } else {
+                        it
+                    }
+                }
+                return previousState.copy(
+                    toolsList = toolsList,
+                    isShapeVisible = !previousState.isShapeVisible,
+                    canvasViewState = previousState.canvasViewState.copy(shape = selectedShape)
                 )
             }
 
@@ -107,7 +135,8 @@ class CanvasViewModel : BaseViewModel<ViewState>() {
                 return previousState.copy(
                     isBrushSizeChangerVisible = false,
                     isPaletteVisible = false,
-                    isToolsVisible = false
+                    isToolsVisible = false,
+                    isShapeVisible = false
                 )
             }
 

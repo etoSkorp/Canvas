@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
         private const val PALETTE_VIEW = 0
         private const val TOOLS_VIEW = 1
         private const val SIZE_VIEW = 2
+        private const val SHAPE_VIEW = 3
     }
 
     private val viewModel: CanvasViewModel by viewModel()
@@ -20,8 +21,9 @@ class MainActivity : AppCompatActivity() {
     private var toolsList: List<ToolsLayout> = listOf()
 
     private val paletteLayout: ToolsLayout by lazy { findViewById(R.id.paletteLayout) }
-    private val brushSizeLayout: ToolsLayout by lazy { findViewById(R.id.brushSizeLayout) }
     private val toolsLayout: ToolsLayout by lazy { findViewById(R.id.toolsLayout) }
+    private val brushSizeLayout: ToolsLayout by lazy { findViewById(R.id.brushSizeLayout) }
+    private val shapeLayout: ToolsLayout by lazy { findViewById(R.id.shapeLayout) }
     private val ivToolbarBrush: ImageView by lazy { findViewById(R.id.ivToolbarBrush) }
     private val ivToolbarClear: ImageView by lazy { findViewById(R.id.ivToolbarClear) }
     private val drawView: DrawView by lazy { findViewById(R.id.drawView) }
@@ -30,11 +32,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        toolsList = listOf(paletteLayout, toolsLayout, brushSizeLayout)
+        toolsList = listOf(paletteLayout, toolsLayout, brushSizeLayout, shapeLayout)
         viewModel.viewState.observe(this, ::render)
 
         ivToolbarBrush.setOnClickListener {
             viewModel.processUIEvent(UIEvent.OnToolbarClicked)
+        }
+
+        toolsLayout.setOnClickListener {
+            viewModel.processUIEvent(UIEvent.OnToolsClicked(it))
         }
 
         paletteLayout.setOnClickListener {
@@ -45,9 +51,10 @@ class MainActivity : AppCompatActivity() {
             viewModel.processUIEvent(UIEvent.OnSizeClicked(it))
         }
 
-        toolsLayout.setOnClickListener {
-            viewModel.processUIEvent(UIEvent.OnToolsClicked(it))
+        shapeLayout.setOnClickListener {
+            viewModel.processUIEvent(UIEvent.OnShapeClicked(it))
         }
+
         ivToolbarClear.setOnClickListener {
             drawView.clear()
         }
@@ -62,7 +69,6 @@ class MainActivity : AppCompatActivity() {
         with(toolsList[TOOLS_VIEW]) {
             render(viewState.toolsList)
             isVisible = viewState.isToolsVisible
-
         }
 
         with(toolsList[PALETTE_VIEW]) {
@@ -73,6 +79,11 @@ class MainActivity : AppCompatActivity() {
         with(toolsList[SIZE_VIEW]) {
             render(viewState.sizeList)
             isVisible = viewState.isBrushSizeChangerVisible
+        }
+
+        with(toolsList[SHAPE_VIEW]) {
+            render(viewState.shapeList)
+            isVisible = viewState.isShapeVisible
         }
 
         drawView.render(viewState.canvasViewState)

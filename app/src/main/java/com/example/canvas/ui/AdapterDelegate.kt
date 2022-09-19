@@ -26,6 +26,19 @@ fun colorAdapterDelegate(
         }
     }
 
+fun shapeAdapterDelegate(
+    onClick: (Int) -> Unit
+): AdapterDelegate<List<Item>> =
+    adapterDelegateLayoutContainer<ToolItem.ShapeModel, Item>(
+        R.layout.item_shape
+    ) {
+        val shape: ImageView = findViewById(R.id.ivShape)
+        itemView.setOnClickListener { onClick(adapterPosition) }
+        bind { list ->
+            shape.setImageResource(item.shape)
+        }
+    }
+
 fun sizeChangeAdapterDelegate(
     onSizeClick: (Int) -> Unit
 ): AdapterDelegate<List<Item>> =
@@ -58,7 +71,7 @@ fun toolsAdapterDelegate(
         R.layout.item_tools
     ) {
         val ivTool: ImageView by lazy { findViewById(R.id.ivTool) }
-//        val tvToolsText: TextView = findViewById(R.id.tvToolsText)
+
         bind { list ->
             ivTool.setImageResource(item.type.value)
 
@@ -68,6 +81,10 @@ fun toolsAdapterDelegate(
                         context.resources.getColor(item.selectedColor.value, null),
                         PorterDuff.Mode.SRC_IN
                     )
+                }
+
+                TOOLS.SHAPE -> {
+                    ivTool.setImageResource(item.selectedShape.value)
                 }
 
                 else -> {

@@ -134,6 +134,7 @@ class DrawView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawBitmap(extraBitmap, 0f, 0f, null)
+//        canvas.drawRect(100f,100f,200f,200f, paint)
         canvas.drawPath(drawing, paint)
         canvas.drawPath(curPath, paint)
     }

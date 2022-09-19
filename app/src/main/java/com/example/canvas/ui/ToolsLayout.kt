@@ -30,6 +30,9 @@ class ToolsLayout @JvmOverloads constructor(
         },
         toolsAdapterDelegate {
             onClick(it)
+        },
+        shapeAdapterDelegate {
+            onClick(it)
         }
     )
 
